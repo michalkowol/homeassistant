@@ -1,0 +1,432 @@
+views:
+  - title: Home
+    sections:
+      - type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: input_boolean.heating_auto_mode
+            show_state: true
+          - type: entities
+            title: Boiler Control
+            show_header_toggle: false
+            entities:
+              - type: attribute
+                entity: weather.forecast_home
+                attribute: temperature
+                name: Outdoor Temperature
+                icon: mdi:thermometer
+              - entity: sensor.radiator_target_flow_temperature
+                name: Calculated Target
+              - entity: input_number.last_manual_boiler_setpoint
+                name: Manual Setpoint
+              - type: conditional
+                conditions:
+                  - entity: binary_sensor.boiler_setpoint_deviation_alert
+                    state: 'on'
+                row:
+                  type: section
+                  label: ⚠️ High Deviation (>5°C)! Update Boiler!
+          - type: custom:scheduler-card
+          - type: custom:scheduler-card
+            title: Home Heating Control
+            display_options:
+              primary_info: name
+              secondary_info: current-text
+              icon: action
+            include:
+              - climate.zuzia_thermostat
+              - climate.bedroom_thermostat
+              - climate.office_thermostat
+              - climate.madzia_thermostat
+              - climate.piotrek_thermostat
+              - climate.kitchen_thermostat
+              - climate.vestibule_thermostat
+              - climate.bathroom_ground_floor_thermostat
+              - climate.bathroom_first_floor_thermostat
+            customize:
+              climate:
+                modes:
+                  heat:
+                    icon: mdi:fire
+                    name: Heat
+                  'off':
+                    icon: mdi:power-off
+                    name: 'Off'
+            time_step: 15
+        column_span: 4
+      - type: grid
+        cards:
+          - type: heading
+            heading: Bedroom
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.bedroom_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.bedroom_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.bedroom_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Zuzia
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.zuzia_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.zuzia_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.zuzia_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Madzia
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.madzia_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.madzia_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.madzia_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Piotrek
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.piotrek_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.piotrek_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.piotrek_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Office
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.office_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.office_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.office_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Kichen
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.kitchen_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.kitchen_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.kitchen_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Bathroom (ground floor)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.bathroom_ground_floor_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.bathroom_ground_floor_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.bathroom_ground_floor_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Vestibule
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.vestibule_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.vestibule_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.vestibule_thermostat
+      - type: grid
+        cards:
+          - type: heading
+            heading: Bathroom (first floor)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: climate.bathroom_first_floor_thermostat
+                state_content:
+                  - hvac_action
+                  - current_temperature
+          - type: thermostat
+            entity: climate.bathroom_first_floor_thermostat
+            features:
+              - type: climate-preset-modes
+                style: dropdown
+            show_current_as_primary: false
+            name:
+              type: device
+          - type: history-graph
+            hours_to_show: 24
+            show_names: false
+            fit_y_data: true
+            min_y_axis: 15
+            max_y_axis: 25
+            entities:
+              - entity: climate.bathroom_first_floor_thermostat
+      - type: grid
+        cards:
+          - type: history-graph
+            title: Heating
+            fit_y_data: true
+            hours_to_show: 12
+            show_names: true
+            grid_options:
+              columns: full
+            entities:
+              - entity: switch.listwa_gorna_switch
+                name: Bedroom
+              - entity: switch.listwa_dolna_switch_5
+                name: Zuzia
+              - entity: switch.listwa_gorna_switch_3
+                name: Madzia
+              - entity: switch.listwa_dolna_switch_3
+                name: Piotrek
+              - entity: switch.listwa_gorna_switch_2
+                name: Office
+              - entity: switch.listwa_gorna_switch_4
+                name: Kitchen
+              - entity: switch.listwa_gorna_switch_5
+                name: Vestibule
+              - entity: switch.listwa_gorna_switch_6
+                name: Bathroom (Ground Floor)
+              - entity: switch.listwa_gorna_switch_7
+                name: Bathroom (First Floor)
+              - entity: switch.listwa_gorna_switch_8
+                name: Heating Pump
+        column_span: 3
+      - type: grid
+        cards:
+          - type: entities
+            title: Underfloor heating
+            show_header_toggle: true
+            state_color: true
+            entities:
+              - type: divider
+              - entity: switch.listwa_gorna_switch_8
+                name: Pompa obiegowa
+              - entity: switch.listwa_gorna_switch_4
+                name: Kuchnia
+              - entity: switch.listwa_gorna_switch_5
+                name: Wiatrołap
+              - entity: switch.listwa_gorna_switch_6
+                name: Łazienka parter
+              - entity: switch.listwa_gorna_switch_7
+                name: Łazienka 1 piętro
+          - type: history-graph
+            title: History graph
+            hours_to_show: 12
+            refresh_interval: 60
+            entities:
+              - entity: switch.listwa_gorna_switch_8
+                name: Pompa obiegowa
+              - entity: switch.listwa_gorna_switch_4
+                name: Kuchnia
+              - entity: switch.listwa_gorna_switch_5
+                name: Wiatrołap
+              - entity: switch.listwa_gorna_switch_6
+                name: Łazienka parter
+              - entity: switch.listwa_gorna_switch_7
+                name: Łazienka 1 piętro
+        column_span: 2
+      - type: grid
+        cards:
+          - type: grid
+            square: false
+            columns: 1
+            cards:
+              - type: tile
+                entity: schedule.bedroom_comfort
+                name: Bedroom comfort
+                icon: mdi:bed
+                color: orange
+              - type: tile
+                entity: schedule.zuzia_comfort
+                name: Zuzia comfort
+                icon: mdi:human-child
+                color: orange
+              - type: tile
+                entity: schedule.madzia_comfort
+                name: Madzia comfort
+                icon: mdi:human-child
+                color: orange
+              - type: tile
+                entity: schedule.piotrek_comfort
+                name: Piotrek comfort
+                icon: mdi:human-child
+                color: orange
+              - type: tile
+                entity: schedule.office_comfort
+                name: Office comfort
+                icon: mdi:desk
+                color: orange
+          - type: history-graph
+            title: Comfort
+            hours_to_show: 12
+            refresh_interval: 60
+            entities:
+              - entity: schedule.bedroom_comfort
+                name: Bedroom
+              - entity: schedule.zuzia_comfort
+                name: Zuzia
+              - entity: schedule.madzia_comfort
+                name: Madzia
+              - entity: schedule.piotrek_comfort
+                name: Piotrek
+              - entity: schedule.office_comfort
+                name: Office
+        column_span: 2
+    header: {}

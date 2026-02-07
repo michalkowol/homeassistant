@@ -20,7 +20,7 @@ input_number:
     step: 0.1
     mode: box
     icon: mdi:chart-bell-curve-cumulative
-
+  
   radiator_heating_curve_shift:
     name: Radiator Heating Curve Shift
     min: -10
@@ -29,6 +29,7 @@ input_number:
     mode: box
     unit_of_measurement: "°C"
     icon: mdi:arrow-expand-vertical
+  
   last_manual_boiler_setpoint:
     name: Ostatnia nastawa na kotle
     min: 20
@@ -184,6 +185,7 @@ template:
           {% set calculated = states('sensor.radiator_target_flow_temperature') | float(0) %}
           {% set manual = states('input_number.last_manual_boiler_setpoint') | float(0) %}
           {{ (calculated - manual) | abs > 5 }}
+  
   - sensor:
       - name: Radiator Target Flow Temperature
         unique_id: eygjq
