@@ -1,0 +1,718 @@
+default_config:
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+input_boolean:
+  heating_auto_mode:
+    name: Automatic Heating Mode
+    icon: mdi:calendar-sync
+
+# How to set the curve (Instruction):
+# Start: Set Slope to 1.7 and Shift to 0
+# Cold outside (-10°C) and cold inside: Increase Slope (e.g., to 1.9)
+# Cold outside (-10°C) and too hot inside: Decrease Slope (e.g., to 1.5)
+# Warm outside (+5°C) and cold inside: Increase Shift (e.g., to +2°C)
+# Warm outside (+5°C) and too hot inside: Decrease Shift (e.g., to -2°C)
+input_number:
+  radiator_heating_curve_slope:
+    name: Radiator Heating Curve Slope
+    min: 0.5
+    max: 3.0
+    step: 0.1
+    mode: box
+    icon: mdi:chart-bell-curve-cumulative
+
+  radiator_heating_curve_shift:
+    name: Radiator Heating Curve Shift
+    min: -10
+    max: 10
+    step: 1
+    mode: box
+    unit_of_measurement: "°C"
+    icon: mdi:arrow-expand-vertical
+  last_manual_boiler_setpoint:
+    name: Ostatnia nastawa na kotle
+    min: 20
+    max: 80
+    step: 1
+    mode: box
+    unit_of_measurement: "°C"
+    icon: mdi:human-edit
+
+group:
+  underfloor_heating:
+    name: Underfloor heating
+    entities:
+      - switch.listwa_gorna_switch_8
+      - switch.listwa_gorna_switch_4
+      - switch.listwa_gorna_switch_5
+      - switch.listwa_gorna_switch_6
+      - switch.listwa_gorna_switch_7
+
+climate:
+  - platform: generic_thermostat
+    unique_id: w8632
+    name: Zuzia Thermostat
+    heater: switch.listwa_dolna_switch_5
+    target_sensor: sensor.temperature_humidity_sensor_8f72_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: iwiy4
+    name: Bedroom Thermostat
+    heater: switch.listwa_gorna_switch
+    target_sensor: sensor.temperature_humidity_sensor_c5bf_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: p77gp
+    name: Office Thermostat
+    heater: switch.listwa_gorna_switch_2
+    target_sensor: sensor.office_fake_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: yrfm4
+    name: Madzia Thermostat
+    heater: switch.listwa_gorna_switch_3
+    target_sensor: sensor.temperature_humidity_sensor_dcac_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: x94wt
+    name: Piotrek Thermostat
+    heater: switch.listwa_dolna_switch_3
+    target_sensor: sensor.temperature_humidity_sensor_abc7_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: k29jf
+    name: Kitchen Thermostat
+    heater: switch.listwa_gorna_switch_4
+    target_sensor: sensor.temperature_humidity_sensor_8387_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: v48dj
+    name: Vestibule Thermostat
+    heater: switch.listwa_gorna_switch_5
+    target_sensor: sensor.vestibule_fake_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: b67hg
+    name: Bathroom Ground Floor Thermostat
+    heater: switch.listwa_gorna_switch_6
+    target_sensor: sensor.bathroom_ground_floor_fake_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+  - platform: generic_thermostat
+    unique_id: b12lk
+    name: Bathroom First Floor Thermostat
+    heater: switch.listwa_gorna_switch_7
+    target_sensor: sensor.bathroom_first_floor_fake_temperature
+    initial_hvac_mode: heat
+    min_temp: 15
+    max_temp: 23
+    ac_mode: false
+    target_temp: 20
+    cold_tolerance: 0.2
+    hot_tolerance: 0.5
+    target_temp_step: 0.5
+
+template:
+  - binary_sensor:
+      - name: Boiler Setpoint Deviation Alert
+        unique_id: 36f6g
+        icon: mdi:alert-circle
+        state: >
+          {% set calculated = states('sensor.radiator_target_flow_temperature') | float(0) %}
+          {% set manual = states('input_number.last_manual_boiler_setpoint') | float(0) %}
+          {{ (calculated - manual) | abs > 5 }}
+  - sensor:
+      - name: Radiator Target Flow Temperature
+        unique_id: eygjq
+        unit_of_measurement: "°C"
+        state_class: measurement
+        icon: mdi:water-boiler
+        state: >
+          {% set outdoor = state_attr('weather.forecast_home', 'temperature') | float(0) %}
+          {% set slope = states('input_number.radiator_heating_curve_slope') | float(1.7) %}
+          {% set shift = states('input_number.radiator_heating_curve_shift') | float(0) %}
+          {% set delta_t = [20 - outdoor, 0] | max %}
+          {% set target = 20 + slope * 3.5 * (delta_t ** 0.65) + shift %}
+          {{ min(75, max(25, target)) | round(0) }}
+      
+      - name: Zuzia Target Temperature
+        unique_id: bmj3a
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.zuzia_comfort', 'on') %}
+            21
+          {% else %}
+            19
+          {% endif %}
+
+      - name: Bedroom Target Temperature
+        unique_id: b7hc4
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.bedroom_comfort', 'on') %}
+            21
+          {% else %}
+            19
+          {% endif %}
+
+      - name: Office Target Temperature
+        unique_id: etmmk
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.office_comfort', 'on') %}
+            21
+          {% else %}
+            17
+          {% endif %}
+
+      - name: Madzia Target Temperature
+        unique_id: adyxe
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.madzia_comfort', 'on') %}
+            21
+          {% else %}
+            19
+          {% endif %}
+
+      - name: Piotrek Target Temperature
+        unique_id: aae86
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.piotrek_comfort', 'on') %}
+            21
+          {% else %}
+            19
+          {% endif %}
+
+      - name: Kitchen Target Temperature
+        unique_id: k99df
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.kitchen_comfort', 'on') %}
+            21
+          {% else %}
+            19
+          {% endif %}
+
+      - name: Vestibule Target Temperature
+        unique_id: v55sd
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.vestibule_comfort', 'on') %}
+            21
+          {% else %}
+            19
+          {% endif %}
+
+      - name: Bathroom Ground Floor Target Temperature
+        unique_id: bg22k
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.bathroom_ground_floor_comfort', 'on') %}
+            22
+          {% else %}
+            20
+          {% endif %}
+
+      - name: Bathroom First Floor Target Temperature
+        unique_id: bf33l
+        icon: mdi:thermometer-check
+        unit_of_measurement: "°C"
+        state: >
+          {% if is_state('schedule.bathroom_first_floor_comfort', 'on') %}
+            22
+          {% else %}
+            20
+          {% endif %}
+
+      - name: Office Fake Temperature
+        unique_id: y68ri
+        icon: mdi:thermometer
+        unit_of_measurement: "°C"
+        state: "16"
+
+      - name: Kitchen Fake Temperature
+        unique_id: k11ft
+        icon: mdi:thermometer
+        unit_of_measurement: "°C"
+        state: "18"
+
+      - name: Vestibule Fake Temperature
+        unique_id: v22ft
+        icon: mdi:thermometer
+        unit_of_measurement: "°C"
+        state: "18"
+
+      - name: Bathroom Ground Floor Fake Temperature
+        unique_id: bg33f
+        icon: mdi:thermometer
+        unit_of_measurement: "°C"
+        state: "18"
+
+      - name: Bathroom First Floor Fake Temperature
+        unique_id: bf44f
+        icon: mdi:thermometer
+        unit_of_measurement: "°C"
+        state: "18"
+
+automation:
+  - id: heating_control_auto_sync
+    alias: "Heating - Follow Schedule (Auto Mode Only)"
+    mode: parallel
+    trigger:
+      - platform: homeassistant
+        event: start
+        id: "force_all"
+      - platform: state
+        entity_id: input_boolean.heating_auto_mode
+        to: "on"
+        id: "force_all"
+      - platform: state
+        entity_id: sensor.zuzia_target_temperature
+        id: "zuzia"
+      - platform: state
+        entity_id: sensor.bedroom_target_temperature
+        id: "bedroom"
+      - platform: state
+        entity_id: sensor.office_target_temperature
+        id: "office"
+      - platform: state
+        entity_id: sensor.madzia_target_temperature
+        id: "madzia"
+      - platform: state
+        entity_id: sensor.piotrek_target_temperature
+        id: "piotrek"
+      - platform: state
+        entity_id: sensor.kitchen_target_temperature
+        id: "kitchen"
+      - platform: state
+        entity_id: sensor.vestibule_target_temperature
+        id: "vestibule"
+      - platform: state
+        entity_id: sensor.bathroom_ground_floor_target_temperature
+        id: "bathroom_ground_floor"
+      - platform: state
+        entity_id: sensor.bathroom_first_floor_target_temperature
+        id: "bathroom_first_floor"
+    condition:
+      - condition: state
+        entity_id: input_boolean.heating_auto_mode
+        state: "on"
+    action:
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "zuzia", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.zuzia_thermostat
+                data:
+                  temperature: "{{ states('sensor.zuzia_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "bedroom", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.bedroom_thermostat
+                data:
+                  temperature: "{{ states('sensor.bedroom_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "office", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.office_thermostat
+                data:
+                  temperature: "{{ states('sensor.office_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "madzia", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.madzia_thermostat
+                data:
+                  temperature: "{{ states('sensor.madzia_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "piotrek", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.piotrek_thermostat
+                data:
+                  temperature: "{{ states('sensor.piotrek_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "kitchen", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.kitchen_thermostat
+                data:
+                  temperature: "{{ states('sensor.kitchen_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "vestibule", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.vestibule_thermostat
+                data:
+                  temperature: "{{ states('sensor.vestibule_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "bathroom_ground_floor", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.bathroom_ground_floor_thermostat
+                data:
+                  temperature: "{{ states('sensor.bathroom_ground_floor_target_temperature') }}"
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: [ "bathroom_first_floor", "force_all" ]
+            sequence:
+              - action: climate.set_temperature
+                target:
+                  entity_id: climate.bathroom_first_floor_thermostat
+                data:
+                  temperature: "{{ states('sensor.bathroom_first_floor_target_temperature') }}"
+  - id: underfloor_heating_pump_control
+    alias: "Underfloor Heating - Pump Control"
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.listwa_gorna_switch_4
+          - switch.listwa_gorna_switch_5
+          - switch.listwa_gorna_switch_6
+          - switch.listwa_gorna_switch_7
+    action:
+      - if:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: switch.listwa_gorna_switch_4
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_gorna_switch_5
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_gorna_switch_6
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_gorna_switch_7
+                state: "on"
+        then:
+          - delay: "00:03:00"
+          - action: switch.turn_on
+            target:
+              entity_id: switch.listwa_gorna_switch_8
+        else:
+          - action: switch.turn_off
+            target:
+              entity_id: switch.listwa_gorna_switch_8
+
+zha:
+  custom_quirks_path: config/custom_zha_quirks
+
+mqtt:
+  sensor:
+    - name: "Temperatura nawiewu"
+      unique_id: reqnet_temp_nawiewu
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
+      value_template: "{{ value_json.Values[57] }}"
+      device: &reqnet_device
+        identifiers:
+          - "B4:8A:0A:C7:01:12"
+        name: "Rekuperator"
+        manufacturer: "Reqnet"
+        model: "reQ V.550 HRV / ERV"
+
+    - name: "Temperatura wyciągu"
+      unique_id: reqnet_temp_wyciagu
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
+      value_template: "{{ value_json.Values[58] }}"
+      device: *reqnet_device
+
+    - name: "Temperatura wyrzutni"
+      unique_id: reqnet_temp_wyrzutni
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
+      value_template: "{{ value_json.Values[56] }}"
+      device: *reqnet_device
+
+    - name: "Temperatura czerpni"
+      unique_id: reqnet_temp_czerpni
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
+      value_template: "{{ value_json.Values[55] }}"
+      device: *reqnet_device
+
+    - name: "Wilgotność"
+      unique_id: reqnet_humidity
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "%"
+      device_class: humidity
+      state_class: measurement
+      value_template: "{{ value_json.Values[7] }}"
+      device: *reqnet_device
+
+    - name: "Stężenie CO2"
+      unique_id: reqnet_co2
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "ppm"
+      device_class: carbon_dioxide
+      state_class: measurement
+      value_template: "{{ value_json.Values[8] }}"
+      device: *reqnet_device
+
+    - name: "Przepływ nawiewu"
+      unique_id: reqnet_flow_supply
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "m³/h"
+      icon: mdi:weather-windy
+      state_class: measurement
+      value_template: "{{ value_json.Values[3] }}"
+      device: *reqnet_device
+
+    - name: "Przepływ wyciągu"
+      unique_id: reqnet_flow_extract
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "m³/h"
+      icon: mdi:weather-windy-variant
+      state_class: measurement
+      value_template: "{{ value_json.Values[4] }}"
+      device: *reqnet_device
+
+    - name: "Nastawa nawiewu (Manual)"
+      unique_id: reqnet_setpoint_supply
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "m³/h"
+      icon: mdi:target
+      value_template: "{{ value_json.Values[5] }}"
+      device: *reqnet_device
+
+    - name: "Nastawa wyciągu (Manual)"
+      unique_id: reqnet_setpoint_extract
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "m³/h"
+      icon: mdi:target
+      value_template: "{{ value_json.Values[6] }}"
+      device: *reqnet_device
+
+    - name: "Moc wentylatora nawiew"
+      unique_id: reqnet_fan_power_supply
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "%"
+      icon: mdi:fan
+      state_class: measurement
+      value_template: "{{ value_json.Values[65] }}"
+      device: *reqnet_device
+
+    - name: "Moc wentylatora wyciąg"
+      unique_id: reqnet_fan_power_extract
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "%"
+      icon: mdi:fan
+      state_class: measurement
+      value_template: "{{ value_json.Values[66] }}"
+      device: *reqnet_device
+
+    - name: "Filtry - pozostało dni"
+      unique_id: reqnet_filter_days
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      unit_of_measurement: "dni"
+      icon: mdi:filter-outline
+      value_template: "{{ value_json.Values[83] }}"
+      device: *reqnet_device
+
+    - name: "Aktualny tryb pracy"
+      unique_id: reqnet_work_mode_text
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      icon: mdi:state-machine
+      value_template: >
+        {% set mode = value_json.Values[10] %}
+        {% set modes = {
+          1: "Szybkie grzanie",
+          2: "Szybkie chłodzenie",
+          3: "Urlop",
+          4: "Przewietrzanie",
+          5: "Oczyszczanie",
+          6: "Kominek",
+          8: "Ręczny",
+          9: "Inteligentny",
+          10: "Pomiar wydajności"
+        } %}
+        {{ modes.get(mode, "Inny (" ~ mode ~ ")") }}
+      device: *reqnet_device
+
+  binary_sensor:
+    - name: "Rekuperator włączony"
+      unique_id: reqnet_status_on
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      payload_on: 1
+      payload_off: 0
+      value_template: "{{ value_json.Values[0] }}"
+      device: *reqnet_device
+
+    - name: "Status rekuperatora"
+      unique_id: reqnet_error_alert
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      device_class: problem
+      value_template: "{{ 'ON' if value_json.Values[40] > 0 else 'OFF' }}"
+      device: *reqnet_device
+
+  select:
+    - name: "Bypass"
+      unique_id: reqnet_bypass_mode
+      icon: mdi:valve
+      command_topic: "B4:8A:0A:C7:01:12/SetByPassMode"
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      options:
+        - "Zamknięty"
+        - "Otwarty"
+        - "Automatyczny"
+      command_template: >
+        {% set map = {
+          "Zamknięty": 0,
+          "Otwarty": 1,
+          "Automatyczny": 2
+        } %}
+        { "mode": {{ map[value] }} }
+      value_template: >
+        {% set val = value_json.Values[39] %}
+        {% if val == 0 %} Zamknięty
+        {% elif val == 1 %} Otwarty
+        {% elif val >= 2 %} Automatyczny
+        {% else %} Automatyczny
+        {% endif %}
+      optimistic: false
+      qos: 1
+      device: *reqnet_device
+
+  number:
+    - name: "Włącz Tryb Manualny (Symetrycznie)"
+      unique_id: reqnet_manual_sync_set
+      icon: mdi:fan-auto
+      state_topic: "B4:8A:0A:C7:01:12/CurrentWorkParametersResult"
+      value_template: "{{ value_json.Values[6] }}"
+      command_topic: "B4:8A:0A:C7:01:12/ManualMode"
+      command_template: >
+        { 
+          "airflowvalue": {{ value }},
+          "valueofairextraction": {{ value }}
+        }
+      min: 100
+      max: 530
+      step: 10
+      qos: 1
+      device: *reqnet_device
+
+  button:
+    - name: "Włącz Tryb Automatyczny"
+      unique_id: reqnet_auto_mode_trigger
+      icon: mdi:robot
+      command_topic: "B4:8A:0A:C7:01:12/AutomaticMode"
+      payload_press: "{}"
+      qos: 1
+      device: *reqnet_device
