@@ -3,13 +3,8 @@ views:
     sections:
       - type: grid
         cards:
-          - show_name: true
-            show_icon: true
-            type: button
-            entity: input_boolean.heating_auto_mode
-            show_state: true
           - type: entities
-            title: Boiler Control
+            title: Boiler control
             show_header_toggle: false
             entities:
               - type: attribute
@@ -28,33 +23,6 @@ views:
                 row:
                   type: section
                   label: ⚠️ High Deviation (>5°C)! Update Boiler!
-          - type: custom:scheduler-card
-          - type: custom:scheduler-card
-            title: Home Heating Control
-            display_options:
-              primary_info: name
-              secondary_info: current-text
-              icon: action
-            include:
-              - climate.zuzia_thermostat
-              - climate.bedroom_thermostat
-              - climate.office_thermostat
-              - climate.madzia_thermostat
-              - climate.piotrek_thermostat
-              - climate.kitchen_thermostat
-              - climate.vestibule_thermostat
-              - climate.bathroom_ground_floor_thermostat
-              - climate.bathroom_first_floor_thermostat
-            customize:
-              climate:
-                modes:
-                  heat:
-                    icon: mdi:fire
-                    name: Heat
-                  'off':
-                    icon: mdi:power-off
-                    name: 'Off'
-            time_step: 15
         column_span: 4
       - type: grid
         cards:
@@ -204,7 +172,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            heading: Kichen
+            heading: Kitchen
             heading_style: title
             badges:
               - type: entity
@@ -384,49 +352,94 @@ views:
         column_span: 2
       - type: grid
         cards:
-          - type: grid
-            square: false
-            columns: 1
-            cards:
-              - type: tile
-                entity: schedule.bedroom_comfort
-                name: Bedroom comfort
-                icon: mdi:bed
-                color: orange
-              - type: tile
-                entity: schedule.zuzia_comfort
-                name: Zuzia comfort
-                icon: mdi:human-child
-                color: orange
-              - type: tile
-                entity: schedule.madzia_comfort
-                name: Madzia comfort
-                icon: mdi:human-child
-                color: orange
-              - type: tile
-                entity: schedule.piotrek_comfort
-                name: Piotrek comfort
-                icon: mdi:human-child
-                color: orange
-              - type: tile
-                entity: schedule.office_comfort
-                name: Office comfort
-                icon: mdi:desk
-                color: orange
-          - type: history-graph
-            title: Comfort
-            hours_to_show: 12
-            refresh_interval: 60
-            entities:
-              - entity: schedule.bedroom_comfort
-                name: Bedroom
-              - entity: schedule.zuzia_comfort
-                name: Zuzia
-              - entity: schedule.madzia_comfort
-                name: Madzia
-              - entity: schedule.piotrek_comfort
-                name: Piotrek
-              - entity: schedule.office_comfort
-                name: Office
-        column_span: 2
+          - type: custom:scheduler-card
+            title: Bedroom
+            include:
+              - climate
+            discover_existing: false
+            show_add_button: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
+            tags:
+              - Bedroom
+          - type: custom:scheduler-card
+            title: Zuzia
+            include:
+              - climate
+            discover_existing: false
+            show_add_button: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
+            tags:
+              - Zuzia
+          - type: custom:scheduler-card
+            title: Madzia
+            include:
+              - climate
+            discover_existing: false
+            show_add_button: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
+            tags:
+              - Madzia
+          - type: custom:scheduler-card
+            title: Piotrek
+            include:
+              - climate
+            discover_existing: false
+            show_add_button: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
+            tags:
+              - Piotrek
+          - type: custom:scheduler-card
+            title: Office
+            include:
+              - climate
+            discover_existing: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
+            tags:
+              - Office
+        column_span: 4
     header: {}

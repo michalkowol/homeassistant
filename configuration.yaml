@@ -185,7 +185,7 @@ template:
           {% set calculated = states('sensor.radiator_target_flow_temperature') | float(0) %}
           {% set manual = states('input_number.last_manual_boiler_setpoint') | float(0) %}
           {{ (calculated - manual) | abs > 5 }}
-  
+
   - sensor:
       - name: Radiator Target Flow Temperature
         unique_id: eygjq
