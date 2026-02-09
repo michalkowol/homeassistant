@@ -353,7 +353,7 @@ views:
       - type: grid
         cards:
           - type: custom:scheduler-card
-            title: Bedroom
+            title: Kids & Bedroom
             include:
               - climate
             discover_existing: false
@@ -370,65 +370,15 @@ views:
             show_header_toggle: true
             tags:
               - Bedroom
-          - type: custom:scheduler-card
-            title: Zuzia
-            include:
-              - climate
-            discover_existing: false
-            show_add_button: false
-            time_step: 30
-            default_editor: scheme
-            sort_by:
-              - state
-              - relative-time
-            display_options:
-              primary_info: default
-              secondary_info:
-                - days
-            show_header_toggle: true
-            tags:
-              - Zuzia
-          - type: custom:scheduler-card
-            title: Madzia
-            include:
-              - climate
-            discover_existing: false
-            show_add_button: false
-            time_step: 30
-            default_editor: scheme
-            sort_by:
-              - state
-              - relative-time
-            display_options:
-              primary_info: default
-              secondary_info:
-                - days
-            show_header_toggle: true
-            tags:
               - Madzia
-          - type: custom:scheduler-card
-            title: Piotrek
-            include:
-              - climate
-            discover_existing: false
-            show_add_button: false
-            time_step: 30
-            default_editor: scheme
-            sort_by:
-              - state
-              - relative-time
-            display_options:
-              primary_info: default
-              secondary_info:
-                - days
-            show_header_toggle: true
-            tags:
+              - Zuzia
               - Piotrek
           - type: custom:scheduler-card
             title: Office
             include:
               - climate
             discover_existing: false
+            show_add_button: false
             time_step: 30
             default_editor: scheme
             sort_by:
@@ -441,5 +391,41 @@ views:
             show_header_toggle: true
             tags:
               - Office
+          - type: custom:scheduler-card
+            title: Other areas
+            include:
+              - climate
+            discover_existing: false
+            show_add_button: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
+            tags:
+              - Kitchen
+              - Vestibule
+              - Bathroom
+          - type: custom:scheduler-card
+            title: All rooms
+            include:
+              - climate
+            discover_existing: false
+            show_add_button: false
+            time_step: 30
+            default_editor: scheme
+            sort_by:
+              - state
+              - relative-time
+            display_options:
+              primary_info: default
+              secondary_info:
+                - days
+            show_header_toggle: true
         column_span: 4
     header: {}

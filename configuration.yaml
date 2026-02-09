@@ -258,6 +258,27 @@ automation:
             target:
               entity_id: switch.listwa_gorna_switch_8
 
+  - id: boiler_setpoint_deviation_notification
+    alias: "Boiler Setpoint Deviation - Push Notification"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.boiler_setpoint_deviation_alert
+        to: "on"
+    action:
+      - action: notify.mobile_app_michal
+        data:
+          title: "⚠️ Boiler Setpoint Deviation"
+          message: >
+            Boiler setpoint deviates from the calculated value.
+
+            Calculated: {{ states('sensor.radiator_target_flow_temperature') | round(0) }}°C.
+            
+            Manual: {{ states('input_number.last_manual_boiler_setpoint') | round(0) }}°C.
+          data:
+            tag: boiler_setpoint_deviation
+            channel: heating
+
 zha:
   custom_quirks_path: config/custom_zha_quirks
 
