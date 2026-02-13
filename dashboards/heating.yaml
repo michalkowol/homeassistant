@@ -16,6 +16,13 @@ views:
                 name: Calculated Target
               - entity: input_number.last_manual_boiler_setpoint
                 name: Manual Setpoint
+              - type: button
+                name: Sync Setpoint
+                icon: mdi:sync
+                action_name: Sync
+                tap_action:
+                  action: perform-action
+                  perform_action: script.sync_boiler_setpoint
               - type: conditional
                 conditions:
                   - entity: binary_sensor.boiler_setpoint_deviation_alert

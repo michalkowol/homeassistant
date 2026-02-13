@@ -1,0 +1,10 @@
+sync_boiler_setpoint:
+  alias: Sync Boiler Setpoint
+  description: Sets manual boiler setpoint to match the calculated target flow temperature
+  sequence:
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.last_manual_boiler_setpoint
+      data:
+        value: "{{ states('sensor.radiator_target_flow_temperature') | float }}"
+  mode: single
