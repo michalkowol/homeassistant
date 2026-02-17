@@ -279,6 +279,65 @@ automation:
             tag: boiler_setpoint_deviation
             channel: heating
 
+  - id: water_leak_critical_notifications
+    alias: "Water Leak - Critical Notifications"
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.water_leak_sensor
+        to: "on"
+    action:
+      - action: notify.notify
+        data:
+          message: "🚨 WATER LEAK DETECTED! Check the sensor immediately."
+          title: "CRITICAL: Water Leak Alert"
+          data:
+            ttl: 0
+            priority: high
+            channel: alarm_stream
+            tag: water_leak
+            push:
+              sound:
+                name: "default"
+                critical: 1
+                volume: 1.0
+      - delay: "00:05:00"
+      - condition: state
+        entity_id: binary_sensor.water_leak_sensor
+        state: "on"
+      - action: notify.notify
+        data:
+          message: "Water leak still active! (5 minutes elapsed)"
+          title: "CRITICAL: Water Leak Reminder"
+          data:
+            ttl: 0
+            priority: high
+            channel: alarm_stream
+            tag: water_leak
+            push:
+              sound:
+                name: "default"
+                critical: 1
+                volume: 1.0
+      - delay: "00:25:00"
+      - condition: state
+        entity_id: binary_sensor.water_leak_sensor
+        state: "on"
+      - action: notify.notify
+        data:
+          message: "Water leak still active! (30 minutes elapsed)"
+          title: "CRITICAL: Water Leak Urgent"
+          data:
+            ttl: 0
+            priority: high
+            channel: alarm_stream
+            tag: water_leak
+            push:
+              sound:
+                name: "default"
+                critical: 1
+                volume: 1.0
+
 zha:
   custom_quirks_path: config/custom_zha_quirks
 
