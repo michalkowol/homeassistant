@@ -293,36 +293,8 @@ views:
             entities:
               - entity: climate.bathroom_first_floor_thermostat
       - type: grid
-        cards:
-          - type: history-graph
-            title: Heating
-            fit_y_data: true
-            hours_to_show: 12
-            show_names: true
-            grid_options:
-              columns: full
-            entities:
-              - entity: switch.listwa_gorna_switch
-                name: Bedroom
-              - entity: switch.listwa_dolna_switch_5
-                name: Zuzia
-              - entity: switch.listwa_gorna_switch_3
-                name: Madzia
-              - entity: switch.listwa_dolna_switch_3
-                name: Piotrek
-              - entity: switch.listwa_gorna_switch_2
-                name: Office
-              - entity: switch.listwa_gorna_switch_4
-                name: Kitchen
-              - entity: switch.listwa_gorna_switch_5
-                name: Vestibule
-              - entity: switch.listwa_gorna_switch_6
-                name: Bathroom (Ground Floor)
-              - entity: switch.listwa_gorna_switch_7
-                name: Bathroom (First Floor)
-              - entity: switch.listwa_gorna_switch_8
-                name: Heating Pump
-        column_span: 3
+        cards: []
+        column_span: 2
       - type: grid
         cards:
           - type: entities
@@ -332,31 +304,59 @@ views:
             entities:
               - type: divider
               - entity: switch.listwa_gorna_switch_8
-                name: Pompa obiegowa
+              - type: divider
               - entity: switch.listwa_gorna_switch_4
-                name: Kuchnia
               - entity: switch.listwa_gorna_switch_5
-                name: Wiatrołap
+              - type: divider
               - entity: switch.listwa_gorna_switch_6
-                name: Łazienka parter
               - entity: switch.listwa_gorna_switch_7
-                name: Łazienka 1 piętro
           - type: history-graph
             title: History graph
             hours_to_show: 12
             refresh_interval: 60
             entities:
               - entity: switch.listwa_gorna_switch_8
-                name: Pompa obiegowa
               - entity: switch.listwa_gorna_switch_4
-                name: Kuchnia
               - entity: switch.listwa_gorna_switch_5
-                name: Wiatrołap
               - entity: switch.listwa_gorna_switch_6
-                name: Łazienka parter
               - entity: switch.listwa_gorna_switch_7
-                name: Łazienka 1 piętro
-        column_span: 2
+          - type: entities
+            title: Radiators
+            show_header_toggle: true
+            state_color: true
+            entities:
+              - type: divider
+              - entity: switch.listwa_dolna_switch
+              - type: divider
+              - entity: switch.listwa_gorna_switch
+              - entity: switch.listwa_dolna_switch_5
+              - entity: switch.listwa_gorna_switch_3
+              - entity: switch.listwa_dolna_switch_3
+              - type: divider
+              - entity: switch.listwa_dolna_switch_8
+              - entity: switch.listwa_dolna_switch_4
+              - entity: switch.listwa_dolna_switch_7
+              - type: divider
+              - entity: switch.listwa_gorna_switch_2
+              - entity: switch.listwa_dolna_switch_6
+              - entity: switch.listwa_dolna_switch_2
+          - type: history-graph
+            title: History graph
+            hours_to_show: 12
+            refresh_interval: 60
+            entities:
+              - entity: switch.listwa_dolna_switch
+              - entity: switch.listwa_gorna_switch
+              - entity: switch.listwa_dolna_switch_5
+              - entity: switch.listwa_gorna_switch_3
+              - entity: switch.listwa_dolna_switch_3
+              - entity: switch.listwa_dolna_switch_8
+              - entity: switch.listwa_dolna_switch_4
+              - entity: switch.listwa_dolna_switch_7
+              - entity: switch.listwa_gorna_switch_2
+              - entity: switch.listwa_dolna_switch_6
+              - entity: switch.listwa_dolna_switch_2
+        column_span: 4
       - type: grid
         cards:
           - type: custom:scheduler-card
