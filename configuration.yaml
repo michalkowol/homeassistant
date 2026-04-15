@@ -39,6 +39,11 @@ input_number:
     unit_of_measurement: "°C"
     icon: mdi:human-edit
 
+input_boolean:
+  ventilation_co2_control:
+    name: Ventilation CO2 Control
+    icon: mdi:molecule-co2
+
 group:
   underfloor_heating:
     name: Underfloor heating
@@ -373,6 +378,70 @@ automation:
                 name: "default"
                 critical: 1
                 volume: 1.0
+
+  - id: ventilation_co2_control
+    alias: "Ventilation - CO2 Based Control"
+    mode: restart
+    trigger:
+      - platform: time_pattern
+        minutes: "/5"
+    condition:
+      - condition: state
+        entity_id: input_boolean.ventilation_co2_control
+        state: "on"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: sensor.stezenie_co2
+            state: "unavailable"
+    action:
+      - variables:
+          co2: "{{ states('sensor.stezenie_co2') | float(600) }}"
+          hour: "{{ now().hour }}"
+          is_purge: "{{ hour == 2 }}"
+          is_night: "{{ hour >= 22 or (hour < 6 and hour != 2) }}"
+      - action: number.set_value
+        target:
+          entity_id: number.ustaw_manual_symetrycznie
+        data:
+          value: >
+            {% if is_purge %}
+              530
+            {% elif is_night %}
+              {% if co2 > 700 %}
+                400
+              {% elif co2 > 650 %}
+                320
+              {% elif co2 > 600 %}
+                250
+              {% else %}
+                200
+              {% endif %}
+            {% else %}
+              {% if co2 > 800 %}
+                350
+              {% elif co2 > 750 %}
+                280
+              {% elif co2 > 700 %}
+                230
+              {% elif co2 > 650 %}
+                180
+              {% else %}
+                150
+              {% endif %}
+            {% endif %}
+
+  - id: ventilation_co2_control_off
+    alias: "Ventilation - Return to Auto When CO2 Control Disabled"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_boolean.ventilation_co2_control
+        to: "off"
+    action:
+      - action: button.press
+        target:
+          entity_id: button.wlacz_tryb_automatyczny
 
 zha:
   custom_quirks_path: config/custom_zha_quirks
