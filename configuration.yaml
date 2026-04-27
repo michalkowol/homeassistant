@@ -20,7 +20,7 @@ input_number:
     step: 0.1
     mode: box
     icon: mdi:chart-bell-curve-cumulative
-  
+
   radiator_heating_curve_shift:
     name: Radiator Heating Curve Shift
     min: -10
@@ -29,7 +29,7 @@ input_number:
     mode: box
     unit_of_measurement: "°C"
     icon: mdi:arrow-expand-vertical
-  
+
   last_manual_boiler_setpoint:
     name: Last Manual Boiler Setpoint
     min: 20
@@ -195,7 +195,7 @@ template:
           {% set delta_t = [20 - outdoor, 0] | max %}
           {% set target = 20 + slope * 3.5 * (delta_t ** 0.65) + shift %}
           {{ min(75, max(25, target)) | round(0) }}
-      
+
       - name: Office Fake Temperature
         unique_id: y68ri
         icon: mdi:thermometer
@@ -254,7 +254,7 @@ automation:
                 entity_id: switch.listwa_gorna_switch_7
                 state: "on"
         then:
-          - delay: "00:03:00"
+          - delay: "00:06:00"
           - action: switch.turn_on
             target:
               entity_id: switch.listwa_gorna_switch_8
@@ -273,6 +273,13 @@ automation:
           - switch.listwa_dolna_switch_5
           - switch.listwa_gorna_switch_3
           - switch.listwa_dolna_switch_3
+          - switch.listwa_dolna_switch_8
+          - switch.listwa_dolna_switch_4
+          - switch.listwa_dolna_switch_7
+          - switch.listwa_gorna_switch_2
+          - switch.listwa_dolna_switch_6
+          - switch.listwa_dolna_switch_2
+          - switch.listwa_gorna_switch_8
     action:
       - if:
           - condition: or
@@ -289,8 +296,29 @@ automation:
               - condition: state
                 entity_id: switch.listwa_dolna_switch_3
                 state: "on"
+              - condition: state
+                entity_id: switch.listwa_dolna_switch_8
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_dolna_switch_4
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_dolna_switch_7
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_gorna_switch_2
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_dolna_switch_6
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_dolna_switch_2
+                state: "on"
+              - condition: state
+                entity_id: switch.listwa_gorna_switch_8
+                state: "on"
         then:
-          - delay: "00:05:00"
+          - delay: "00:06:00"
           - action: switch.turn_on
             target:
               entity_id: switch.listwa_dolna_switch
@@ -314,7 +342,7 @@ automation:
             Boiler setpoint deviates from the calculated value.
 
             Calculated: {{ states('sensor.radiator_target_flow_temperature') | round(0) }}°C.
-            
+
             Manual: {{ states('input_number.last_manual_boiler_setpoint') | round(0) }}°C.
           data:
             tag: boiler_setpoint_deviation
@@ -639,7 +667,7 @@ mqtt:
       value_template: "{{ value_json.Values[6] }}"
       command_topic: "B4:8A:0A:C7:01:12/ManualMode"
       command_template: >
-        { 
+        {
           "airflowvalue": {{ value }},
           "valueofairextraction": {{ value }}
         }
