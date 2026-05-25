@@ -437,25 +437,29 @@ automation:
               530
             {% elif is_night %}
               {% if co2 > 700 %}
-                400
+                530
               {% elif co2 > 650 %}
-                320
+                450
               {% elif co2 > 600 %}
-                250
+                350
+              {% elif co2 > 550 %}
+                280
               {% else %}
-                200
+                220
               {% endif %}
             {% else %}
               {% if co2 > 800 %}
-                350
+                530
               {% elif co2 > 750 %}
-                280
+                450
               {% elif co2 > 700 %}
-                230
+                370
               {% elif co2 > 650 %}
-                180
+                290
+              {% elif co2 > 600 %}
+                220
               {% else %}
-                150
+                170
               {% endif %}
             {% endif %}
 
