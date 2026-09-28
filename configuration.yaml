@@ -85,7 +85,7 @@ climate:
     unique_id: p77gp
     name: Office Thermostat
     heater: switch.listwa_gorna_switch_2
-    target_sensor: sensor.office_fake_temperature
+    target_sensor: sensor.temperature_humidity_sensor_432b_temperature
     initial_hvac_mode: heat
     min_temp: 15
     max_temp: 23
@@ -137,7 +137,7 @@ climate:
     unique_id: v48dj
     name: Vestibule Thermostat
     heater: switch.listwa_gorna_switch_5
-    target_sensor: sensor.vestibule_fake_temperature
+    target_sensor: sensor.temperature_humidity_sensor_04ae_humidity
     initial_hvac_mode: heat
     min_temp: 15
     max_temp: 23
@@ -150,7 +150,7 @@ climate:
     unique_id: b67hg
     name: Bathroom Ground Floor Thermostat
     heater: switch.listwa_gorna_switch_6
-    target_sensor: sensor.bathroom_ground_floor_fake_temperature
+    target_sensor: sensor.temperature_humidity_sensor_e065_temperature
     initial_hvac_mode: heat
     min_temp: 15
     max_temp: 23
@@ -163,7 +163,7 @@ climate:
     unique_id: b12lk
     name: Bathroom First Floor Thermostat
     heater: switch.listwa_gorna_switch_7
-    target_sensor: sensor.bathroom_first_floor_fake_temperature
+    target_sensor: sensor.bathroom_temperature
     initial_hvac_mode: heat
     min_temp: 15
     max_temp: 23
@@ -195,36 +195,6 @@ template:
           {% set delta_t = [20 - outdoor, 0] | max %}
           {% set target = 20 + slope * 3.5 * (delta_t ** 0.65) + shift %}
           {{ min(75, max(25, target)) | round(0) }}
-
-      - name: Office Fake Temperature
-        unique_id: y68ri
-        icon: mdi:thermometer
-        unit_of_measurement: "°C"
-        state: "16"
-
-      - name: Kitchen Fake Temperature
-        unique_id: k11ft
-        icon: mdi:thermometer
-        unit_of_measurement: "°C"
-        state: "18"
-
-      - name: Vestibule Fake Temperature
-        unique_id: v22ft
-        icon: mdi:thermometer
-        unit_of_measurement: "°C"
-        state: "18"
-
-      - name: Bathroom Ground Floor Fake Temperature
-        unique_id: bg33f
-        icon: mdi:thermometer
-        unit_of_measurement: "°C"
-        state: "18"
-
-      - name: Bathroom First Floor Fake Temperature
-        unique_id: bf44f
-        icon: mdi:thermometer
-        unit_of_measurement: "°C"
-        state: "18"
 
 automation:
   - id: underfloor_heating_pump_control
