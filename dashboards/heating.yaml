@@ -33,6 +33,36 @@ views:
         column_span: 4
       - type: grid
         cards:
+          - type: button
+            name: Fireplace
+            icon: mdi:fireplace
+            show_state: false
+            tap_action:
+              action: perform-action
+              perform_action: script.fireplace_mode
+              confirmation:
+                text: Turn off ground floor heating for 6 hours?
+            grid_options:
+              columns: 6
+          - type: button
+            name: Leaving home
+            icon: mdi:home-export-outline
+            show_state: false
+            tap_action:
+              action: perform-action
+              perform_action: script.leaving_home
+              confirmation:
+                text: Set all thermostats to 19°C?
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: timer.fireplace_mode
+            name: Fireplace mode
+            grid_options:
+              columns: 12
+        column_span: 2
+      - type: grid
+        cards:
           - type: heading
             heading: Bedroom
             heading_style: title

@@ -8,3 +8,44 @@ sync_boiler_setpoint:
       data:
         value: "{{ states('sensor.radiator_target_flow_temperature') | float }}"
   mode: single
+
+fireplace_mode:
+  alias: Fireplace Mode
+  description: Turns off ground floor heating for 6 hours while the fireplace is lit
+  icon: mdi:fireplace
+  sequence:
+    - action: climate.set_hvac_mode
+      target:
+        entity_id:
+          - climate.kitchen_thermostat
+          - climate.vestibule_thermostat
+          - climate.bathroom_ground_floor_thermostat
+      data:
+        hvac_mode: "off"
+    - action: timer.start
+      target:
+        entity_id: timer.fireplace_mode
+      data:
+        duration: "06:00:00"
+  mode: single
+
+leaving_home:
+  alias: Leaving Home
+  description: Sets all thermostats to 19°C
+  icon: mdi:home-export-outline
+  sequence:
+    - action: climate.set_temperature
+      target:
+        entity_id:
+          - climate.bedroom_thermostat
+          - climate.zuzia_thermostat
+          - climate.madzia_thermostat
+          - climate.piotrek_thermostat
+          - climate.office_thermostat
+          - climate.kitchen_thermostat
+          - climate.vestibule_thermostat
+          - climate.bathroom_ground_floor_thermostat
+          - climate.bathroom_first_floor_thermostat
+      data:
+        temperature: 19
+  mode: single

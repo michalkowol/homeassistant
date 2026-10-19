@@ -44,6 +44,13 @@ input_boolean:
     name: Ventilation CO2 Control
     icon: mdi:molecule-co2
 
+timer:
+  fireplace_mode:
+    name: Fireplace Mode
+    duration: "06:00:00"
+    restore: true
+    icon: mdi:fireplace
+
 group:
   underfloor_heating:
     name: Underfloor heating
@@ -304,6 +311,7 @@ automation:
       - platform: state
         entity_id: binary_sensor.boiler_setpoint_deviation_alert
         to: "on"
+        for: "03:00:00"
     action:
       - action: notify.mobile_app_michal
         data:
@@ -317,6 +325,24 @@ automation:
           data:
             tag: boiler_setpoint_deviation
             channel: heating
+
+  - id: fireplace_mode_finished
+    alias: "Fireplace Mode - Restore Ground Floor Heating"
+    mode: single
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.fireplace_mode
+    action:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id:
+            - climate.kitchen_thermostat
+            - climate.vestibule_thermostat
+            - climate.bathroom_ground_floor_thermostat
+        data:
+          hvac_mode: heat
 
   - id: water_leak_critical_notifications
     alias: "Water Leak - Critical Notifications"
