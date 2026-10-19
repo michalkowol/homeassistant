@@ -137,7 +137,7 @@ climate:
     unique_id: v48dj
     name: Vestibule Thermostat
     heater: switch.listwa_gorna_switch_5
-    target_sensor: sensor.temperature_humidity_sensor_04ae_humidity
+    target_sensor: sensor.temperature_humidity_sensor_04ae_temperature
     initial_hvac_mode: heat
     min_temp: 15
     max_temp: 23
