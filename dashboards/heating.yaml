@@ -55,12 +55,7 @@ views:
                 text: Set all thermostats to 19°C?
             grid_options:
               columns: 6
-          - type: tile
-            entity: timer.fireplace_mode
-            name: Fireplace mode
-            grid_options:
-              columns: 12
-        column_span: 2
+        column_span: 4
       - type: grid
         cards:
           - type: heading
