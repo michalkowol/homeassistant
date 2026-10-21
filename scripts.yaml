@@ -89,3 +89,15 @@ feeling_cold:
                 {% set max_temp = state_attr(repeat.item, 'max_temp') | float(23) %}
                 {{ [current + 1, max_temp] | min }}
   mode: single
+
+zuzia_home:
+  alias: Zuzia Home
+  description: Sets Zuzia's thermostat to 21°C
+  icon: mdi:human-child
+  sequence:
+    - action: climate.set_temperature
+      target:
+        entity_id: climate.zuzia_thermostat
+      data:
+        temperature: 21
+  mode: single

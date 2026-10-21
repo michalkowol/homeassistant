@@ -77,6 +77,17 @@ views:
                 text: Raise all thermostats by 1°C?
             grid_options:
               columns: 6
+          - type: button
+            name: Zuzia home
+            icon: mdi:human-child
+            show_state: false
+            tap_action:
+              action: perform-action
+              perform_action: script.zuzia_home
+              confirmation:
+                text: Set Zuzia's room to 21°C?
+            grid_options:
+              columns: 6
         column_span: 4
       - type: grid
         cards:
