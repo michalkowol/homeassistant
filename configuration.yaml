@@ -61,6 +61,21 @@ group:
       - switch.listwa_gorna_switch_6
       - switch.listwa_gorna_switch_7
 
+switch:
+  - platform: group
+    unique_id: n3k8d
+    name: Bathroom Ground Floor Heating
+    entities:
+      - switch.listwa_gorna_switch_6
+      - switch.listwa_dolna_switch_8
+
+  - platform: group
+    unique_id: q7m2x
+    name: Bathroom First Floor Heating
+    entities:
+      - switch.listwa_gorna_switch_7
+      - switch.listwa_dolna_switch_4
+
 climate:
   - platform: generic_thermostat
     unique_id: w8632
@@ -156,7 +171,7 @@ climate:
   - platform: generic_thermostat
     unique_id: b67hg
     name: Bathroom Ground Floor Thermostat
-    heater: switch.listwa_gorna_switch_6
+    heater: switch.bathroom_ground_floor_heating
     target_sensor: sensor.temperature_humidity_sensor_e065_temperature
     initial_hvac_mode: heat
     min_temp: 15
@@ -169,7 +184,7 @@ climate:
   - platform: generic_thermostat
     unique_id: b12lk
     name: Bathroom First Floor Thermostat
-    heater: switch.listwa_gorna_switch_7
+    heater: switch.bathroom_first_floor_heating
     target_sensor: sensor.bathroom_temperature
     initial_hvac_mode: heat
     min_temp: 15

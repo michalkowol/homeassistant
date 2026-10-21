@@ -49,3 +49,43 @@ leaving_home:
       data:
         temperature: 19
   mode: single
+
+back_home:
+  alias: Back Home
+  description: Applies the current timeslot of every enabled heating schedule
+  icon: mdi:home-import-outline
+  sequence:
+    - repeat:
+        for_each: "{{ integration_entities('scheduler') | select('is_state', 'on') | list }}"
+        sequence:
+          - action: scheduler.run_action
+            data:
+              entity_id: "{{ repeat.item }}"
+  mode: single
+
+feeling_cold:
+  alias: Feeling Cold
+  description: Raises the target temperature of all thermostats by 1°C
+  icon: mdi:snowflake-thermometer
+  sequence:
+    - repeat:
+        for_each:
+          - climate.bedroom_thermostat
+          - climate.zuzia_thermostat
+          - climate.madzia_thermostat
+          - climate.piotrek_thermostat
+          - climate.office_thermostat
+          - climate.kitchen_thermostat
+          - climate.vestibule_thermostat
+          - climate.bathroom_ground_floor_thermostat
+          - climate.bathroom_first_floor_thermostat
+        sequence:
+          - action: climate.set_temperature
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              temperature: >
+                {% set current = state_attr(repeat.item, 'temperature') | float(19) %}
+                {% set max_temp = state_attr(repeat.item, 'max_temp') | float(23) %}
+                {{ [current + 1, max_temp] | min }}
+  mode: single

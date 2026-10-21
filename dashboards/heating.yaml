@@ -55,6 +55,28 @@ views:
                 text: Set all thermostats to 19°C?
             grid_options:
               columns: 6
+          - type: button
+            name: Back home
+            icon: mdi:home-import-outline
+            show_state: false
+            tap_action:
+              action: perform-action
+              perform_action: script.back_home
+              confirmation:
+                text: Restore scheduled temperatures?
+            grid_options:
+              columns: 6
+          - type: button
+            name: I'm cold!
+            icon: mdi:snowflake-thermometer
+            show_state: false
+            tap_action:
+              action: perform-action
+              perform_action: script.feeling_cold
+              confirmation:
+                text: Raise all thermostats by 1°C?
+            grid_options:
+              columns: 6
         column_span: 4
       - type: grid
         cards:
