@@ -175,7 +175,7 @@ climate:
     target_sensor: sensor.temperature_humidity_sensor_e065_temperature
     initial_hvac_mode: heat
     min_temp: 15
-    max_temp: 23
+    max_temp: 25
     ac_mode: false
     cold_tolerance: 0.2
     hot_tolerance: 0.5
@@ -188,7 +188,7 @@ climate:
     target_sensor: sensor.bathroom_temperature
     initial_hvac_mode: heat
     min_temp: 15
-    max_temp: 23
+    max_temp: 25
     ac_mode: false
     cold_tolerance: 0.2
     hot_tolerance: 0.5
